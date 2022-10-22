@@ -9,6 +9,8 @@ import com.itheima.stock.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api")
 public class usercontroller {
@@ -25,5 +27,12 @@ public class usercontroller {
     public R<LoginRespVo> login(@RequestBody LoginReqVo reqVo){
         return userService.login(reqVo);
     }
+
+    @GetMapping("/captcha")
+    public R<Map> getCaptchaCode(){
+        return userService.getCaptchaCode();
+    }
+
+
 
 }

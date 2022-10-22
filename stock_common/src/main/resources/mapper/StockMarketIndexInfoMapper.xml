@@ -31,6 +31,41 @@
         from stock_market_index_info
         where  id = #{id,jdbcType=BIGINT} 
     </select>
+    <select id="findStockMarket" resultType="com.itheima.stock.pojo.domain.InnerMarketDomain">
+        select
+        smii.market_code as code,
+        smii.market_name as name,
+        smii.open_point as openPoint,
+        smii.cur_point as curPoint,
+        smii.pre_close_point as preClosePrice,
+        smii.trade_amount as tradeAmt,
+        smii.trade_volume as tradeVol,
+        smii.cur_point-smii.pre_close_point as upDown,
+        (smii.cur_point-smii.pre_close_point)/smii.pre_close_point as rose,
+        (smii.max_point-smii.min_point)/smii.pre_close_point as amplitude,
+        smii.cur_time as curTime
+        from stock_market_index_info as smii
+        where smii.market_code in
+        <foreach collection="code" item="code"  open="(" separator="," close=")">
+            #{code}
+        </foreach>
+            AND smii.cur_time = #{timepiont}
+    </select>
+    <select id="findStockBlock" resultType="com.itheima.stock.pojo.domain.StockBlockDomain">
+        select
+            sbr.company_num  as companyNum,
+            sbr.trade_amount as tradeAmt,
+            sbr.label        as code,
+            sbr.avg_price    as avgPrice,
+            sbr.block_name   as name,
+            sbr.cur_time     as curDate,
+            sbr.trade_volume as tradeVol,
+            sbr.updown_rate  as updownRate
+        from stock_block_rt_info as sbr
+        where sbr.cur_time=#{date}
+        order by sbr.trade_volume desc
+            limit 10
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_market_index_info
