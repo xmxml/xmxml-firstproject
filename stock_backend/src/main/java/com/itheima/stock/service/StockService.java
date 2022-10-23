@@ -1,10 +1,14 @@
 package com.itheima.stock.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.itheima.stock.mapper.StockMarketIndexInfoMapper;
 import com.itheima.stock.pojo.domain.InnerMarketDomain;
 import com.itheima.stock.pojo.domain.StockBlockDomain;
+import com.itheima.stock.pojo.domain.StockUpdownDomain;
 import com.itheima.stock.pojo.resp.R;
 import com.itheima.stock.pojo.resp.ResponseCode;
+import com.itheima.stock.pojo.vo.PageResult;
 import com.itheima.stock.pojo.vo.StockInfoConfig;
 import com.itheima.stock.untils.DateTimeUtil;
 import org.joda.time.DateTime;
@@ -44,5 +48,16 @@ public class StockService {
             return R.error(ResponseCode.NO_RESPONSE_DATA);
         }
         return R.ok(stockBlock);
+    }
+
+
+    public R<PageResult<StockUpdownDomain>> findByPageStock(Integer page, Integer pageSize) {
+        PageHelper.startPage(page,pageSize);
+        Date date = DateTimeUtil.getLastDate4Stock(new DateTime()).toDate();
+        date = DateTime.parse("2022-06-07 15:00:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+        List<StockUpdownDomain> list = stockMarketIndexInfoMapper.findByPageStock(date);
+        PageInfo<StockUpdownDomain> stockUpdownDomainPageInfo = new PageInfo<>(list);
+        PageResult<StockUpdownDomain> stockUpdownDomainPageResult = new PageResult<>(stockUpdownDomainPageInfo);
+        return R.ok(stockUpdownDomainPageResult);
     }
 }

@@ -2,6 +2,7 @@ package com.itheima.stock.mapper;
 
 import com.itheima.stock.pojo.domain.InnerMarketDomain;
 import com.itheima.stock.pojo.domain.StockBlockDomain;
+import com.itheima.stock.pojo.domain.StockUpdownDomain;
 import com.itheima.stock.pojo.entity.StockMarketIndexInfo;
 import org.apache.ibatis.annotations.Param;
 
@@ -31,4 +32,7 @@ public interface StockMarketIndexInfoMapper {
     List<InnerMarketDomain> findStockMarket(@Param("code") List<String> inner,@Param("timepiont") Date date);
 
     List<StockBlockDomain> findStockBlock(@Param("date")Date date);
+
+
+    List<StockUpdownDomain> findByPageStock(@Param("date")Date date);
 }

@@ -66,6 +66,22 @@
         order by sbr.trade_volume desc
             limit 10
     </select>
+    <select id="findByPageStock" resultType="com.itheima.stock.pojo.domain.StockUpdownDomain">
+        SELECT
+            sri.trade_amount AS tradeAmt,
+            sri.pre_close_price AS preClosePrice,
+            (sri.max_price- sri.min_price)/sri.pre_close_price AS amplitude,
+            sri.stock_code AS code,
+            sri.stock_name AS name,
+            sri.cur_time   AS curdate,
+            sri.trade_volume AS tradeVol,
+            (sri.cur_price-sri.pre_close_price) AS upDown,
+            (sri.cur_price- sri.pre_close_price)/sri.pre_close_price AS increase,
+            sri.cur_price AS tradePrice
+        FROM stock_rt_info AS sri
+        WHERE sri.cur_time  = #{date}
+        ORDER BY upDown DESC
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_market_index_info
