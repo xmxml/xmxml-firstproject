@@ -65,8 +65,11 @@ public class UserService {
     }
 
     public R<Map> getCaptchaCode() {
+        //雪花算数生成一个不唯一的数rkey
         String s = String.valueOf(idWorker.nextId());
+        //生成一个验证码
         String s1 = RandomStringUtils.randomNumeric(4);
+        //把两个数放进redis中缓存
         redisTemplate.opsForValue().set(StockConstant.CHECK_PREFIX+s,s1,1, TimeUnit.MINUTES);
         HashMap<String, String> stringStringHashMap = new HashMap<>();
         stringStringHashMap.put("code",s1);

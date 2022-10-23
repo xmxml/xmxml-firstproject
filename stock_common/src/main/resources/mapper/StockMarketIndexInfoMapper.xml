@@ -82,6 +82,52 @@
         WHERE sri.cur_time  = #{date}
         ORDER BY upDown DESC
     </select>
+    <select id="findStockGain" resultType="com.itheima.stock.pojo.domain.StockUpdownDomain">
+        SELECT
+            sri.trade_amount AS tradeAmt,
+            sri.pre_close_price AS preClosePrice,
+            (sri.max_price- sri.min_price)/sri.pre_close_price AS amplitude,
+            sri.stock_code AS code,
+            sri.stock_name AS name,
+            sri.cur_time   AS curdate,
+            sri.trade_volume AS tradeVol,
+            (sri.cur_price-sri.pre_close_price) AS upDown,
+            (sri.cur_price- sri.pre_close_price)/sri.pre_close_price AS increase,
+            sri.cur_price AS tradePrice
+        FROM stock_rt_info AS sri
+        WHERE sri.cur_time  = #{date}
+        ORDER BY upDown DESC
+        limit 5
+    </select>
+
+    <select id="findStockUpCount" resultType="java.util.Map">
+        SELECT
+             tmp.time AS TIME,
+             COUNT(*) COUNT
+        FROM (SELECT
+            (sri.cur_price-sri.pre_close_price)/sri.pre_close_price AS updown,
+            sri.cur_time AS TIME
+            FROM stock_rt_info AS sri
+            WHERE sri.cur_time BETWEEN #{opendate} AND #{closedate}
+            HAVING updown >=0.1
+            ) AS tmp
+        GROUP BY tmp.time
+        ORDER BY tmp.time ASC
+    </select>
+    <select id="findStockDownCount" resultType="java.util.Map">
+        SELECT
+            tmp.time AS TIME,
+             COUNT(*) COUNT
+        FROM (SELECT
+            (sri.cur_price-sri.pre_close_price)/sri.pre_close_price AS updown,
+            sri.cur_time AS TIME
+            FROM stock_rt_info AS sri
+            WHERE sri.cur_time BETWEEN #{opendate} AND #{closedate}
+            HAVING updown &lt;=-0.1
+            ) AS tmp
+        GROUP BY tmp.time
+        ORDER BY tmp.time ASC
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_market_index_info

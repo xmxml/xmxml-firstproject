@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author 19308
@@ -35,4 +36,10 @@ public interface StockMarketIndexInfoMapper {
 
 
     List<StockUpdownDomain> findByPageStock(@Param("date")Date date);
+
+    List<StockUpdownDomain> findStockGain(@Param("date")Date date);
+
+    List<Map> findStockUpCount(@Param("opendate") Date opendate,@Param("closedate") Date closedate);
+
+    List<Map> findStockDownCount(@Param("opendate") Date opendate,@Param("closedate") Date closedate);
 }
