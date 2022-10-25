@@ -17,4 +17,6 @@ public class StockInfoConfig {
     private List<String> inner;
     //外盘ID集合
     private List<String> outer;
+
+    private List<String> upDownRange;
 }

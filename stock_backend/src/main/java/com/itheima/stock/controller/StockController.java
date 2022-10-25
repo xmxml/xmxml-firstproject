@@ -70,5 +70,17 @@ public class StockController {
         stockService.stockExport(response,Page,PageSize);
     }
 
+    @GetMapping("/stock/tradevol")
+    @ApiOperation(value = "股票国内大盘成交量")
+    public R<Map> findVolume(){
+        return stockService.findVolume();
+    }
+
+    @GetMapping("/stock/updown")
+    @ApiOperation(value = "个股分时涨跌幅度统计")
+    public R<Map> findStockUpdown(){
+        return stockService.findStockUpdown();
+    }
+
 
 }

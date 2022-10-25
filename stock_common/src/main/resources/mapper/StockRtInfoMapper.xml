@@ -31,6 +31,30 @@
         from stock_rt_info
         where  id = #{id,jdbcType=BIGINT} 
     </select>
+    <select id="findStockUpdown" resultType="java.util.Map">
+      <![CDATA[
+        SELECT
+        tmp1.title,
+        COUNT(*) AS COUNT
+        FROM (
+        SELECT
+        CASE
+        WHEN tmp.rate > 0.07 THEN  '>7%'
+        WHEN tmp.rate > 0.05  AND tmp.rate <= 0.07 THEN '5~7%'
+        WHEN tmp.rate > 0.03  AND tmp.rate <= 0.05 THEN '3~5%'
+        WHEN tmp.rate > 0     AND tmp.rate <= 0.03 THEN '0~3%'
+        WHEN tmp.rate > -0.03 AND tmp.rate <= 0 THEN '-3~0%'
+        WHEN tmp.rate > -0.05 AND tmp.rate <= -0.03 THEN '-5~-3%'
+        WHEN tmp.rate > -0.07 AND tmp.rate <= -0.05 THEN '-7~-5%'
+        ELSE '<-7%'
+        END 'title'
+        FROM (SELECT
+        (sri.cur_price-sri.pre_close_price)/sri.pre_close_price AS rate
+        FROM stock_rt_info AS sri
+        WHERE sri.cur_time = '2022-01-06 09:55:00') AS tmp)AS tmp1
+        GROUP BY tmp1.title
+        ]]>
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_rt_info

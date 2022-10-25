@@ -42,4 +42,6 @@ public interface StockMarketIndexInfoMapper {
     List<Map> findStockUpCount(@Param("opendate") Date opendate,@Param("closedate") Date closedate);
 
     List<Map> findStockDownCount(@Param("opendate") Date opendate,@Param("closedate") Date closedate);
+
+    List<Map> findVolume(@Param("inner") List<String> inner, @Param("agoDate") Date agoDate, @Param("agoOpenDate") Date agoOpenDate);
 }

@@ -129,6 +129,20 @@
         ORDER BY tmp.time ASC
     </select>
 
+    <select id="findVolume" resultType="java.util.Map">
+        SELECT
+            DATE_FORMAT(smii.cur_time,'%Y%m%d%H%i') AS TIME,
+            SUM(smii.trade_amount) COUNT
+        FROM stock_market_index_info AS smii
+        WHERE smii.cur_time BETWEEN #{agoOpenDate} AND #{agoDate}
+          AND smii.market_code IN
+        <foreach collection="inner" item="inner" open="(" separator="," close=")">
+            #{inner}
+        </foreach>
+        GROUP BY TIME
+        ORDER BY smii.cur_time
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_market_index_info
         where  id = #{id,jdbcType=BIGINT} 

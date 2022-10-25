@@ -1,6 +1,11 @@
 package com.itheima.stock.mapper;
 
 import com.itheima.stock.pojo.entity.StockRtInfo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @author 19308
@@ -9,6 +14,8 @@ import com.itheima.stock.pojo.entity.StockRtInfo;
 * @Entity com.itheima.stock.pojo.entity.StockRtInfo
 */
 public interface StockRtInfoMapper {
+
+    List<Map> findStockUpdown(@Param("curTime") Date curTime);
 
     int deleteByPrimaryKey(Long id);
 
