@@ -1,5 +1,7 @@
 package com.itheima.stock.service;
 
+import com.alibaba.excel.EasyExcel;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.itheima.stock.mapper.StockMarketIndexInfoMapper;
@@ -11,15 +13,21 @@ import com.itheima.stock.pojo.resp.ResponseCode;
 import com.itheima.stock.pojo.vo.PageResult;
 import com.itheima.stock.pojo.vo.StockInfoConfig;
 import com.itheima.stock.untils.DateTimeUtil;
+import jdk.internal.instrumentation.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.*;
 
 @Service
+@Slf4j
 public class StockService {
     @Autowired
     private StockMarketIndexInfoMapper stockMarketIndexInfoMapper;
@@ -78,5 +86,39 @@ public class StockService {
         map.put("upList",opencount);
         map.put("downList",closecount);
         return R.ok(map);
+    }
+
+    public void stockExport(HttpServletResponse response, Integer page, Integer pageSize) {
+        try {
+            Date curDate = DateTimeUtil.getLastDate4Stock(DateTime.now()).toDate();
+            curDate=DateTime.parse("2022-01-05 09:47:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+            PageHelper.startPage(page,pageSize);
+            List<StockUpdownDomain> infos=stockMarketIndexInfoMapper.findByPageStock(curDate);
+            //如果集合为空，响应错误提示信息
+            //设置响应数据的编码格式
+            response.setCharacterEncoding("utf-8");
+            if (CollectionUtils.isEmpty(infos)) {
+                //响应提示信息
+                R<Object> r = R.error(ResponseCode.NO_RESPONSE_DATA);
+                response.setContentType("application/json");
+                response.getWriter().write(new ObjectMapper().writeValueAsString(r));
+                return;
+            }
+            //设置响应excel文件格式类型
+            response.setContentType("application/vnd.ms-excel");
+            //设置默认的文件名称
+            // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+            String fileName = URLEncoder.encode("股票excel", "UTF-8");
+            //设置默认文件名称：兼容一些特殊浏览器
+            response.setHeader("content-disposition", "attachment;filename=" + fileName + ".xlsx");
+            //4.响应excel流
+            EasyExcel
+                    .write(response.getOutputStream(),StockUpdownDomain.class)
+                    .sheet("股票信息")
+                    .doWrite(infos);
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.info("当前导出数据异常，当前页：{},每页大小：{},异常信息：{}",page,pageSize,e.getMessage());
+        }
     }
 }

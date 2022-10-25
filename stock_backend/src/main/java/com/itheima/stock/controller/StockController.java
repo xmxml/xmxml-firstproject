@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -59,4 +60,15 @@ public class StockController {
     public R<Map>  findStockUpdownCount(){
         return stockService.findStockUpdownCount();
     }
+
+    @GetMapping("/stock/export")
+    @ApiOperation(value = "股票涨跌榜转换excel")
+    public void stockExport(HttpServletResponse response,
+     @RequestParam(name="Page",required = false,defaultValue = "1") Integer Page,
+     @RequestParam(name="PageSize",required = false,defaultValue = "20")Integer PageSize
+    ){
+        stockService.stockExport(response,Page,PageSize);
+    }
+
+
 }

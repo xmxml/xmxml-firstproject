@@ -33,6 +33,7 @@
         <spring-boot.version>2.5.3</spring-boot.version>
         <joda-time.version>2.10.5</joda-time.version>
         <google.guava.version>30.0-jre</google.guava.version>
+        <easyexcel.version>3.0.4</easyexcel.version>
     </properties>
     <description>股票父工程，用于聚合管理整个项目</description>
 
@@ -118,6 +119,11 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${google.guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>${easyexcel.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
