@@ -1,5 +1,6 @@
 package com.itheima.stock.mapper;
 
+import com.itheima.stock.pojo.domain.Stock4MinuteDomain;
 import com.itheima.stock.pojo.entity.StockRtInfo;
 import org.apache.ibatis.annotations.Param;
 
@@ -29,4 +30,7 @@ public interface StockRtInfoMapper {
 
     int updateByPrimaryKey(StockRtInfo record);
 
+    List<Stock4MinuteDomain> findStockScreenTimeSharing(@Param("code") String code, @Param("nowDate") Date nowDate, @Param("nowOpenDate") Date nowOpenDate);
+
+    List<Stock4MinuteDomain> findStockScreenDkline(@Param("code") String code, @Param("nowDate") Date nowDate, @Param("agoDate") Date agoDate);
 }

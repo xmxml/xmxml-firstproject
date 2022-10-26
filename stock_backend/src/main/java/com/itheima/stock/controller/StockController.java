@@ -2,6 +2,7 @@ package com.itheima.stock.controller;
 
 
 import com.itheima.stock.pojo.domain.InnerMarketDomain;
+import com.itheima.stock.pojo.domain.Stock4MinuteDomain;
 import com.itheima.stock.pojo.domain.StockBlockDomain;
 import com.itheima.stock.pojo.domain.StockUpdownDomain;
 import com.itheima.stock.pojo.resp.R;
@@ -10,10 +11,7 @@ import com.itheima.stock.service.StockService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -80,6 +78,18 @@ public class StockController {
     @ApiOperation(value = "个股分时涨跌幅度统计")
     public R<Map> findStockUpdown(){
         return stockService.findStockUpdown();
+    }
+
+    @GetMapping("/stock/screen/time-sharing")
+    @ApiOperation(value = "个股分时K线行情功能")
+    public R<List<Stock4MinuteDomain>> findStockScreenTimeSharing(@RequestParam("code") String code){
+        return  stockService.findStockScreenTimeSharing(code);
+    }
+
+    @GetMapping("/stock/screen/dkline")
+    @ApiOperation(value = "日K线行情功能")
+    public R<List<Stock4MinuteDomain>> findStockScreenDkline(@RequestParam("code") String code){
+        return stockService.findStockScreenDkline(code);
     }
 
 

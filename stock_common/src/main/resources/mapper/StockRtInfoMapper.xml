@@ -55,6 +55,41 @@
         GROUP BY tmp1.title
         ]]>
     </select>
+    <select id="findStockScreenTimeSharing" resultType="com.itheima.stock.pojo.domain.Stock4MinuteDomain">
+        SELECT
+            sri.cur_time     AS DATE,
+	sri.trade_amount AS tradeAmt,
+	sri.stock_code AS CODE,
+	sri.min_price lowPrice,
+	sri.pre_close_price AS preClosePrice,
+	sri.stock_name AS NAME,
+	sri.max_price AS highPrice,
+	sri.open_price AS openPrice,
+	sri.trade_volume AS tradeVol,
+	sri.cur_price AS tradePrice
+        FROM stock_rt_info AS sri
+        WHERE sri.stock_code = #{code} AND sri.cur_time BETWEEN #{nowOpenDate} AND #{nowDate}
+    </select>
+    <select id="findStockScreenDkline" resultType="com.itheima.stock.pojo.domain.Stock4MinuteDomain">
+        SELECT
+            sri.cur_time     AS DATE,
+	sri.trade_amount AS tradeAmt,
+	sri.stock_code AS CODE,
+	sri.min_price lowPrice,
+	sri.pre_close_price AS preClosePrice,
+	sri.stock_name AS NAME,
+	sri.max_price AS highPrice,
+	sri.open_price AS openPrice,
+	sri.trade_volume AS tradeVol,
+	sri.cur_price AS tradePrice
+        FROM stock_rt_info AS sri
+        WHERE sri.stock_code= #{code}  AND sri.cur_time IN (SELECT
+            MAX(sri1.cur_time)
+            FROM stock_rt_info AS sri1
+            WHERE sri1.stock_code = #{code} AND sri1.cur_time BETWEEN #{agoDate} AND #{nowDate}
+            GROUP BY DATE_FORMAT( sri1.cur_time, '%Y%m%d' )
+            )
+    </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from stock_rt_info

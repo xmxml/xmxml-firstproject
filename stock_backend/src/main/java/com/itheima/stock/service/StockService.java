@@ -7,6 +7,7 @@ import com.github.pagehelper.PageInfo;
 import com.itheima.stock.mapper.StockMarketIndexInfoMapper;
 import com.itheima.stock.mapper.StockRtInfoMapper;
 import com.itheima.stock.pojo.domain.InnerMarketDomain;
+import com.itheima.stock.pojo.domain.Stock4MinuteDomain;
 import com.itheima.stock.pojo.domain.StockBlockDomain;
 import com.itheima.stock.pojo.domain.StockUpdownDomain;
 import com.itheima.stock.pojo.resp.R;
@@ -14,7 +15,6 @@ import com.itheima.stock.pojo.resp.ResponseCode;
 import com.itheima.stock.pojo.vo.PageResult;
 import com.itheima.stock.pojo.vo.StockInfoConfig;
 import com.itheima.stock.untils.DateTimeUtil;
-import jdk.internal.instrumentation.Logger;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -169,5 +169,26 @@ public class StockService {
         map.put("time",s);
         map.put("infos",maps);
         return R.ok(map);
+    }
+
+    public R<List<Stock4MinuteDomain>> findStockScreenTimeSharing(String code) {
+        DateTime lastDate4Stock = DateTimeUtil.getLastDate4Stock(new DateTime());
+        Date nowDate = lastDate4Stock.toDate();
+        Date nowOpenDate = DateTimeUtil.getOpenDate(lastDate4Stock).toDate();
+        nowDate=DateTime.parse("2021-12-30 14:30:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+        nowOpenDate=DateTime.parse("2021-12-30 09:30:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+        List<Stock4MinuteDomain> list = stockRtInfoMapper.findStockScreenTimeSharing(code,nowDate,nowOpenDate);
+        return R.ok(list);
+    }
+
+    public R<List<Stock4MinuteDomain>> findStockScreenDkline(String code) {
+        DateTime lastDate4Stock = DateTimeUtil.getLastDate4Stock(new DateTime());
+        Date nowDate = lastDate4Stock.toDate();
+        DateTime startDateTime = lastDate4Stock.minusDays(30);
+        Date agoDate = startDateTime.toDate();
+        nowDate=DateTime.parse("2022-01-07 15:00:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+        agoDate=DateTime.parse("2022-01-01 09:30:00", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")).toDate();
+        List<Stock4MinuteDomain> list = stockRtInfoMapper.findStockScreenDkline(code,nowDate,agoDate);
+        return R.ok(list);
     }
 }
