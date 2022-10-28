@@ -1,6 +1,9 @@
 package com.itheima.stock.mapper;
 
 import com.itheima.stock.pojo.entity.StockBlockRtInfo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author 19308
@@ -22,4 +25,5 @@ public interface StockBlockRtInfoMapper {
 
     int updateByPrimaryKey(StockBlockRtInfo record);
 
+    int insertData(@Param("stockBlockRtInfos") List<StockBlockRtInfo> stockBlockRtInfos);
 }

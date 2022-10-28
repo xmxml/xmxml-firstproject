@@ -6,6 +6,7 @@ import com.itheima.stock.pojo.domain.StockUpdownDomain;
 import com.itheima.stock.pojo.entity.StockMarketIndexInfo;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -44,4 +45,7 @@ public interface StockMarketIndexInfoMapper {
     List<Map> findStockDownCount(@Param("opendate") Date opendate,@Param("closedate") Date closedate);
 
     List<Map> findVolume(@Param("inner") List<String> inner, @Param("agoDate") Date agoDate, @Param("agoOpenDate") Date agoOpenDate);
+
+
+    void insert1(@Param("list") ArrayList<StockMarketIndexInfo> list);
 }

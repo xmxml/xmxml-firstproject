@@ -1,5 +1,6 @@
 package com.itheima.stock.untils;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.lang.management.ManagementFactory;

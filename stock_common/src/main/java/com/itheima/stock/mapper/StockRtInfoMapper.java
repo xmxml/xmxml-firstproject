@@ -33,4 +33,6 @@ public interface StockRtInfoMapper {
     List<Stock4MinuteDomain> findStockScreenTimeSharing(@Param("code") String code, @Param("nowDate") Date nowDate, @Param("nowOpenDate") Date nowOpenDate);
 
     List<Stock4MinuteDomain> findStockScreenDkline(@Param("code") String code, @Param("nowDate") Date nowDate, @Param("agoDate") Date agoDate);
+
+    int insertBatch(@Param("infos") List<StockRtInfo> infos);
 }

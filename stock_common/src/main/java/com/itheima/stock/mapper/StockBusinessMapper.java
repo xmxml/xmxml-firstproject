@@ -1,6 +1,10 @@
 package com.itheima.stock.mapper;
 
 import com.itheima.stock.pojo.entity.StockBusiness;
+import com.itheima.stock.pojo.entity.StockRtInfo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author 19308
@@ -22,4 +26,7 @@ public interface StockBusinessMapper {
 
     int updateByPrimaryKey(StockBusiness record);
 
+    List<String> getStockIds();
+
+    void insertData(@Param("infos") List<StockRtInfo> infos);
 }
